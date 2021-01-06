@@ -230,7 +230,7 @@ def clear_rows(grid, locked):
 
 def draw_next_shape(shape, surface):
     font = pygame.font.SysFont('comicsans', 30)
-    label = font.render('Next Shape', 1, (255, 255, 255))
+    label = font.render('Следующая фигура', 1, (255, 255, 255))
 
     sx = top_left_x + play_width + 50
     sy = top_left_y + play_height / 2 - 100
@@ -243,7 +243,7 @@ def draw_next_shape(shape, surface):
                 pygame.draw.rect(surface, shape.color,
                                  (sx + j * block_size, sy + i * block_size, block_size, block_size), 0)
 
-    surface.blit(label, (sx + 10, sy - 30))
+    surface.blit(label, (sx - 30, sy - 30))
 
 
 def update_score(nscore):
@@ -275,14 +275,14 @@ def draw_window(surface, grid, score=0, last_score=0):
 
     # current score
     font = pygame.font.SysFont('comicsans', 30)
-    label = font.render('Score: ' + str(score), 1, (255, 255, 255))
+    label = font.render('Счет: ' + str(score), 1, (255, 255, 255))
 
     sx = top_left_x + play_width + 50
     sy = top_left_y + play_height / 2 - 100
 
     surface.blit(label, (sx + 20, sy + 160))
     # last score
-    label = font.render('High Score: ' + last_score, 1, (255, 255, 255))
+    label = font.render('Рекорд: ' + last_score, 1, (255, 255, 255))
 
     sx = top_left_x - 200
     sy = top_left_y + 200
@@ -377,7 +377,7 @@ def main(win):  # *
         pygame.display.update()
 
         if check_lost(locked_positions):
-            draw_text_middle(win, "YOU LOST!", 80, (255, 255, 255))
+            draw_text_middle(win, "Вы проиграли!", 80, (255, 255, 255))
             pygame.display.update()
             pygame.time.delay(1500)
             run = False
