@@ -2,6 +2,8 @@ import pygame
 import random
 import sys
 
+
+pygame.init()
 block_size = 20
 header_margin = 80
 frame_color = (0, 255, 200)
@@ -17,7 +19,7 @@ size = [block_size * blocks_number + 2 * block_size + margin * blocks_number,
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption('Змейка')
 timer = pygame.time.Clock()
-
+font = pygame.font.SysFont('Arial', 36)
 
 class SnakeBlock():
     def __init__(self, x, y):
@@ -51,6 +53,8 @@ snake_blocks = [SnakeBlock(9, 8), SnakeBlock(9, 9), SnakeBlock(9, 10)]
 apple = get_empty_block()
 d_row = 0
 d_col = 1
+total = 0
+snake_speed = 1
 
 while True:
     for event in pygame.event.get():
@@ -80,6 +84,11 @@ while True:
                 color = white_color
             draw_block(color, row, col)
 
+    text_total = font.render("СЧЁТ: {}".format(total), 0, white_color)
+    text_speed = font.render("СКОРОСТЬ: {}".format(snake_speed), 0, apple_color)
+    screen.blit(text_total, (block_size, block_size))
+    screen.blit(text_speed, (blocks_number * block_size / 2, block_size))
+
     head = snake_blocks[-1]
     if not head.is_inside():
         pygame.quit()
@@ -90,6 +99,9 @@ while True:
         draw_block(snake_color, block.x, block.y)
 
     if apple == head:
+        total += 1
+        snake_speed = total // 5 + 1
+        snake_blocks.append(apple)
         apple = get_empty_block()
 
     new_head = SnakeBlock(head.x + d_row, head.y + d_col)
@@ -97,4 +109,4 @@ while True:
     snake_blocks.pop(0)
 
     pygame.display.flip()
-    timer.tick(3)
+    timer.tick(3 + snake_speed)
