@@ -2,7 +2,6 @@ import pygame
 import random
 import sys
 
-
 pygame.init()
 block_size = 20
 header_margin = 80
@@ -20,6 +19,7 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption('Змейка')
 timer = pygame.time.Clock()
 font = pygame.font.SysFont('Arial', 36)
+
 
 class SnakeBlock():
     def __init__(self, x, y):
@@ -51,8 +51,8 @@ def draw_block(color, row, col):
 
 snake_blocks = [SnakeBlock(9, 8), SnakeBlock(9, 9), SnakeBlock(9, 10)]
 apple = get_empty_block()
-d_row = 0
-d_col = 1
+d_row = buf_row = 0
+d_col = buf_col = 1
 total = 0
 snake_speed = 1
 
@@ -60,19 +60,20 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
+            sys.exit()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP and d_col != 0:
-                d_row = -1
-                d_col = 0
+                buf_row = -1
+                buf_col = 0
             elif event.key == pygame.K_DOWN and d_col != 0:
-                d_row = 1
-                d_col = 0
+                buf_row = 1
+                buf_col = 0
             elif event.key == pygame.K_LEFT and d_row != 0:
-                d_row = 0
-                d_col = -1
+                buf_row = 0
+                buf_col = -1
             elif event.key == pygame.K_RIGHT and d_row != 0:
-                d_row = 0
-                d_col = 1
+                buf_row = 0
+                buf_col = 1
 
     screen.fill(frame_color)
     pygame.draw.rect(screen, header_color, [0, 0, size[0], header_margin])
@@ -104,7 +105,14 @@ while True:
         snake_blocks.append(apple)
         apple = get_empty_block()
 
+    d_row = buf_row
+    d_col = buf_col
     new_head = SnakeBlock(head.x + d_row, head.y + d_col)
+
+    if new_head in snake_blocks:
+        pygame.quit()
+        sys.exit()
+
     snake_blocks.append(new_head)
     snake_blocks.pop(0)
 
